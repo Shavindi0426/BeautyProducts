@@ -1,0 +1,12 @@
+# Dependencies (too large to upload)
+node_modules/
+
+# Secret keys (never upload to GitHub!)
+.env
+
+# React build folder
+/frontend/build
+
+# Windows/Mac system files
+.DS_Store
+Thumbs.db

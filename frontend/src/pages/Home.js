@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const products = [
-  { icon: '🧴', name: 'Body Lotion', desc: 'Deep moisturizing with ayurvedic herbs' },
-  { icon: '🫧', name: 'Face Wash', desc: 'Gentle cleansing with natural extracts' },
-  { icon: '✨', name: 'Face Cream', desc: 'Nourishing cream for glowing skin' },
-  { icon: '💧', name: 'Serum', desc: 'Concentrated ayurvedic healing serum' },
-  { icon: '🌱', name: 'Aloe Vera Gel', desc: 'Pure soothing aloe vera gel' },
-  { icon: '💆', name: 'Hair Oil', desc: 'Traditional hair nourishment blend' }
+  { icon: '🧴', name: 'Body Lotion', desc: 'Deep moisturizing with ayurvedic herbs', price: 'LKR 850' },
+  { icon: '🫧', name: 'Face Wash', desc: 'Gentle cleansing with natural extracts', price: 'LKR 750' },
+  { icon: '✨', name: 'Face Cream', desc: 'Nourishing cream for glowing skin', price: 'LKR 950' },
+  { icon: '💧', name: 'Serum', desc: 'Concentrated ayurvedic healing serum', price: 'LKR 1200' },
+  { icon: '🌱', name: 'Aloe Vera Gel', desc: 'Pure soothing aloe vera gel', price: 'LKR 650' },
+  { icon: '💆', name: 'Hair Oil', desc: 'Traditional hair nourishment blend', price: 'LKR 900' }
 ];
 
 const benefits = [
@@ -27,6 +27,21 @@ const plants = [
   { emoji: '🪴', name: 'Aloe Vera', benefit: 'Deep hydration', top: '5%', right: '12%', size: '50px', delay: '0.6s' },
 ];
 
+const ingredients = [
+  { emoji: '🪵', name: 'Red Sandalwood', benefit: 'Skin brightening', desc: 'Cools and soothes skin, reduces dark spots and evens skin tone naturally' },
+  { emoji: '🌿', name: 'Kohomba (Neem)', benefit: 'Antibacterial', desc: 'Powerful antibacterial herb used in Ayurveda for centuries to treat acne and skin infections' },
+  { emoji: '🌸', name: 'Saffron', benefit: 'Skin glow', desc: 'Rare golden spice that brightens complexion, reduces pigmentation and gives a natural glow' },
+  { emoji: '🌰', name: 'Kalanduru (Cinnamon)', benefit: 'Anti-inflammatory', desc: 'True Ceylon cinnamon with anti-inflammatory properties that stimulates blood circulation' },
+  { emoji: '🌺', name: 'Hibiscus', benefit: 'Hair growth', desc: 'Promotes hair growth, prevents premature greying and adds natural shine and softness' },
+  { emoji: '🪴', name: 'Aloe Vera', benefit: 'Deep hydration', desc: 'Deep hydration and cooling effect, perfect for soothing sunburns and sensitive skin' },
+  { emoji: '🌼', name: 'Turmeric', benefit: 'Anti-aging', desc: 'Ancient golden spice with powerful antioxidants that fight aging and brighten skin' },
+  { emoji: '🫚', name: 'Coconut Oil', benefit: 'Deep nourishment', desc: 'Pure Ceylon coconut oil deeply nourishes hair and skin, locking in moisture naturally' },
+  { emoji: '🌱', name: 'Gotukola', benefit: 'Collagen boost', desc: 'Traditional Sri Lankan herb that boosts collagen production and heals skin naturally' },
+  { emoji: '🍃', name: 'Ranawara', benefit: 'Skin healing', desc: 'Beautiful golden Sri Lankan flower known for its skin healing and brightening properties' },
+  { emoji: '🌿', name: 'Iramusu', benefit: 'Blood purifying', desc: 'Powerful blood purifying herb that clears skin from within, treating eczema and rashes' },
+  { emoji: '🫙', name: 'Bee Honey', benefit: 'Moisturizing', desc: 'Pure natural honey with antibacterial properties that moisturizes and heals damaged skin' },
+];
+
 const Home = () => {
   const { user } = useAuth();
   const [scrollY, setScrollY] = useState(0);
@@ -43,7 +58,7 @@ const Home = () => {
       {/* Hero Section */}
       <section style={styles.hero}>
 
-        {/* Floating plants background */}
+        {/* Floating plants */}
         {plants.map((plant, i) => (
           <div
             key={i}
@@ -115,35 +130,20 @@ const Home = () => {
               </div>
             </div>
           </div>
-
-          {/* Orbiting ingredient badges */}
-          <div style={{ ...styles.orbitBadge, top: '-10px', left: '50%', transform: 'translateX(-50%)' }}>
-            🌿 Tulsi
-          </div>
-          <div style={{ ...styles.orbitBadge, top: '50%', right: '-20px', transform: 'translateY(-50%)' }}>
-            🌺 Hibiscus
-          </div>
-          <div style={{ ...styles.orbitBadge, bottom: '-10px', left: '50%', transform: 'translateX(-50%)' }}>
-            🍯 Honey
-          </div>
-          <div style={{ ...styles.orbitBadge, top: '50%', left: '-20px', transform: 'translateY(-50%)' }}>
-            🌼 Turmeric
-          </div>
-
+          <div style={{ ...styles.orbitBadge, top: '-10px', left: '50%', transform: 'translateX(-50%)' }}>🌿 Tulsi</div>
+          <div style={{ ...styles.orbitBadge, top: '50%', right: '-20px', transform: 'translateY(-50%)' }}>🌺 Hibiscus</div>
+          <div style={{ ...styles.orbitBadge, bottom: '-10px', left: '50%', transform: 'translateX(-50%)' }}>🍯 Honey</div>
+          <div style={{ ...styles.orbitBadge, top: '50%', left: '-20px', transform: 'translateY(-50%)' }}>🌼 Turmeric</div>
           <div style={styles.floatBadge1}>✨ Natural</div>
           <div style={styles.floatBadge2}>💚 Pure</div>
         </div>
       </section>
 
-      {/* CSS Animation */}
+      {/* CSS Animations */}
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-12px); }
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
         }
         @keyframes pulse-ring {
           0%, 100% { transform: scale(1); opacity: 1; }
@@ -153,7 +153,11 @@ const Home = () => {
 
       {/* Ingredients Strip */}
       <section style={styles.strip}>
-        {['🌿 Tulsi', '🌺 Hibiscus', '🍯 Honey', '🌼 Turmeric', '🪴 Aloe Vera', '🌸 Rose', '🫚 Coconut Oil', '🌱 Neem'].map((item, i) => (
+        {[
+          '🪵 Red Sandalwood', '🌿 Kohomba', '🌸 Saffron', '🌰 Kalanduru',
+          '🌺 Hibiscus', '🪴 Aloe Vera', '🌼 Turmeric', '🌱 Gotukola',
+          '🍃 Ranawara', '🌿 Iramusu', '🫚 Coconut Oil', '🫙 Bee Honey'
+        ].map((item, i) => (
           <span key={i} style={styles.stripItem}>{item}</span>
         ))}
       </section>
@@ -180,10 +184,17 @@ const Home = () => {
         <div style={styles.productsGrid}>
           {products.map((p, i) => (
             <div key={i} style={styles.productCard}>
-              <div style={styles.productIcon}>{p.icon}</div>
-              <h3 style={styles.productName}>{p.name}</h3>
-              <p style={styles.productDesc}>{p.desc}</p>
-              <Link to="/products" style={styles.productBtn}>View Details →</Link>
+              <div style={styles.productIconWrapper}>
+                <span style={styles.productIcon}>{p.icon}</span>
+              </div>
+              <div style={styles.productInfo}>
+                <h3 style={styles.productName}>{p.name}</h3>
+                <p style={styles.productDesc}>{p.desc}</p>
+                <div style={styles.productFooter}>
+                  <span style={styles.productPrice}>{p.price}</span>
+                  <Link to="/products" style={styles.productBtn}>Shop Now →</Link>
+                </div>
+              </div>
             </div>
           ))}
         </div>
@@ -194,19 +205,13 @@ const Home = () => {
 
       {/* Ayurvedic Ingredients Section */}
       <section style={styles.section}>
-        <h2 style={styles.sectionTitle}>Key Ayurvedic Ingredients</h2>
-        <p style={styles.sectionSubtitle}>Ancient plants with powerful beauty benefits</p>
+        <h2 style={styles.sectionTitle}>Our Key Ayurvedic Ingredients</h2>
+        <p style={styles.sectionSubtitle}>Ancient plants and herbs with powerful beauty benefits</p>
         <div style={styles.ingredientsGrid}>
-          {[
-            { emoji: '🌿', name: 'Tulsi (Holy Basil)', desc: 'Purifies skin, fights bacteria and reduces acne naturally' },
-            { emoji: '🌺', name: 'Hibiscus', desc: 'Promotes hair growth and adds natural shine' },
-            { emoji: '🌼', name: 'Turmeric', desc: 'Powerful anti-inflammatory and skin brightening' },
-            { emoji: '🪴', name: 'Aloe Vera', desc: 'Deep hydration and soothing for sensitive skin' },
-            { emoji: '🌱', name: 'Neem', desc: 'Antibacterial properties for clear healthy skin' },
-            { emoji: '🍯', name: 'Honey', desc: 'Natural moisturizer with healing properties' },
-          ].map((ing, i) => (
+          {ingredients.map((ing, i) => (
             <div key={i} style={styles.ingredientCard}>
               <div style={styles.ingredientEmoji}>{ing.emoji}</div>
+              <div style={styles.ingredientBadge}>{ing.benefit}</div>
               <h4 style={styles.ingredientName}>{ing.name}</h4>
               <p style={styles.ingredientDesc}>{ing.desc}</p>
             </div>
@@ -235,9 +240,7 @@ const Home = () => {
 
       {/* Footer */}
       <footer style={styles.footer}>
-        <div style={styles.footerPlants}>
-          🌿 🌺 🌸 🌼 🪴 🌱
-        </div>
+        <div style={styles.footerPlants}>🌿 🌺 🌸 🌼 🪴 🌱</div>
         <p style={styles.footerText}>🌿 Orica — Pure Ayurvedic Beauty © 2024</p>
         <p style={styles.footerSub}>Made with 💚 using natural ingredients</p>
       </footer>
@@ -283,8 +286,6 @@ const styles = {
     lineHeight: '1.7',
     marginBottom: '24px'
   },
-
-  // Stats
   statsRow: {
     display: 'flex',
     alignItems: 'center',
@@ -300,7 +301,6 @@ const styles = {
   statNum: { display: 'block', fontSize: '22px', color: '#2d6a4f', fontWeight: '800' },
   statLabel: { fontSize: '12px', color: '#888' },
   statDivider: { width: '1px', height: '36px', backgroundColor: '#eee' },
-
   heroButtons: { display: 'flex', gap: '16px', flexWrap: 'wrap' },
   primaryBtn: {
     backgroundColor: '#2d6a4f',
@@ -378,8 +378,6 @@ const styles = {
     fontWeight: '600', fontSize: '13px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
   },
-
-  // Plant labels
   plantLabel: {
     backgroundColor: 'white',
     borderRadius: '8px',
@@ -389,7 +387,7 @@ const styles = {
     whiteSpace: 'nowrap'
   },
 
-  // Ingredients strip
+  // Strip
   strip: {
     backgroundColor: '#2d6a4f',
     padding: '14px 0',
@@ -438,33 +436,76 @@ const styles = {
   productCard: {
     backgroundColor: 'white',
     borderRadius: '16px',
-    padding: '32px 24px',
-    textAlign: 'center',
+    overflow: 'hidden',
     boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
-    border: '1px solid #eee'
+    border: '1px solid #eee',
+    textAlign: 'left'
   },
-  productIcon: { fontSize: '48px', marginBottom: '16px' },
-  productName: { fontSize: '18px', fontWeight: '700', color: '#1a1a2e', marginBottom: '8px' },
-  productDesc: { fontSize: '14px', color: '#777', lineHeight: '1.6', marginBottom: '20px' },
-  productBtn: { color: '#2d6a4f', textDecoration: 'none', fontWeight: '600', fontSize: '14px' },
-  centerBtn: { textAlign: 'center', marginTop: '16px' },
+  productIconWrapper: {
+    backgroundColor: '#f0faf5',
+    padding: '32px',
+    textAlign: 'center',
+    borderBottom: '1px solid #eee'
+  },
+  productIcon: { fontSize: '64px' },
+  productInfo: { padding: '20px' },
+  productName: { fontSize: '18px', fontWeight: '700', color: '#1a1a2e', marginBottom: '8px', margin: '0 0 8px 0' },
+  productDesc: { fontSize: '14px', color: '#777', lineHeight: '1.6', marginBottom: '16px', margin: '0 0 16px 0' },
+  productFooter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  productPrice: { color: '#2d6a4f', fontWeight: '800', fontSize: '16px' },
+  productBtn: {
+    backgroundColor: '#2d6a4f',
+    color: 'white',
+    textDecoration: 'none',
+    fontWeight: '600',
+    fontSize: '13px',
+    padding: '8px 16px',
+    borderRadius: '20px'
+  },
+  centerBtn: { textAlign: 'center', marginTop: '32px' },
 
-  // Ingredients section
+  // Ingredients
   ingredientsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
     gap: '20px'
   },
   ingredientCard: {
     backgroundColor: '#f0faf5',
     borderRadius: '16px',
-    padding: '28px 20px',
+    padding: '24px 20px',
     textAlign: 'center',
     border: '1px solid #d4edda'
   },
-  ingredientEmoji: { fontSize: '44px', marginBottom: '12px' },
-  ingredientName: { fontSize: '16px', fontWeight: '700', color: '#2d6a4f', marginBottom: '8px' },
-  ingredientDesc: { fontSize: '13px', color: '#666', lineHeight: '1.6' },
+  ingredientEmoji: { fontSize: '44px', marginBottom: '10px' },
+  ingredientBadge: {
+    display: 'inline-block',
+    backgroundColor: '#2d6a4f',
+    color: 'white',
+    fontSize: '10px',
+    fontWeight: '700',
+    padding: '3px 10px',
+    borderRadius: '10px',
+    marginBottom: '10px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px'
+  },
+  ingredientName: {
+    fontSize: '15px',
+    fontWeight: '700',
+    color: '#2d6a4f',
+    margin: '0 0 8px 0'
+  },
+  ingredientDesc: {
+    fontSize: '12px',
+    color: '#666',
+    lineHeight: '1.6',
+    margin: 0
+  },
 
   // CTA
   ctaSection: {

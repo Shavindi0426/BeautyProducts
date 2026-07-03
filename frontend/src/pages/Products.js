@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const allProducts = [
-  { id: 1, icon: '🧴', name: 'Body Lotion', category: 'Body Care', desc: 'Deep moisturizing with ayurvedic herbs. Enriched with coconut oil and aloe vera for soft, glowing skin.', price: 850, ingredients: ['Coconut Oil', 'Aloe Vera', 'Turmeric'] },
-  { id: 2, icon: '🫧', name: 'Face Wash', category: 'Face Care', desc: 'Gentle cleansing with natural extracts. Removes impurities without stripping natural oils.', price: 750, ingredients: ['Neem', 'Tulsi', 'Rose Water'] },
-  { id: 3, icon: '✨', name: 'Face Cream', category: 'Face Care', desc: 'Nourishing cream for glowing skin. Deeply hydrates and brightens your complexion naturally.', price: 950, ingredients: ['Saffron', 'Sandalwood', 'Honey'] },
-  { id: 4, icon: '💧', name: 'Serum', category: 'Face Care', desc: 'Concentrated ayurvedic healing serum. Targets dark spots, fine lines and uneven skin tone.', price: 1200, ingredients: ['Saffron', 'Gotukola', 'Iramusu'] },
-  { id: 5, icon: '🌱', name: 'Aloe Vera Gel', category: 'Body Care', desc: 'Pure soothing aloe vera gel. Calms irritated skin, sunburns and acts as a light moisturizer.', price: 650, ingredients: ['Aloe Vera', 'Rose Water', 'Tulsi'] },
-  { id: 6, icon: '💆', name: 'Hair Oil', category: 'Hair Care', desc: 'Traditional hair nourishment blend. Strengthens roots, reduces hair fall and adds shine.', price: 900, ingredients: ['Coconut Oil', 'Hibiscus', 'Kalanduru'] },
+  { id: '1', icon: '🧴', name: 'Body Lotion', category: 'Body Care', desc: 'Deep moisturizing with ayurvedic herbs. Enriched with coconut oil and aloe vera for soft, glowing skin.', price: 850, ingredients: ['Coconut Oil', 'Aloe Vera', 'Turmeric'] },
+  { id: '2', icon: '🫧', name: 'Face Wash', category: 'Face Care', desc: 'Gentle cleansing with natural extracts. Removes impurities without stripping natural oils.', price: 750, ingredients: ['Neem', 'Tulsi', 'Rose Water'] },
+  { id: '3', icon: '✨', name: 'Face Cream', category: 'Face Care', desc: 'Nourishing cream for glowing skin. Deeply hydrates and brightens your complexion naturally.', price: 950, ingredients: ['Saffron', 'Sandalwood', 'Honey'] },
+  { id: '4', icon: '💧', name: 'Serum', category: 'Face Care', desc: 'Concentrated ayurvedic healing serum. Targets dark spots, fine lines and uneven skin tone.', price: 1200, ingredients: ['Saffron', 'Gotukola', 'Iramusu'] },
+  { id: '5', icon: '🌱', name: 'Aloe Vera Gel', category: 'Body Care', desc: 'Pure soothing aloe vera gel. Calms irritated skin, sunburns and acts as a light moisturizer.', price: 650, ingredients: ['Aloe Vera', 'Rose Water', 'Tulsi'] },
+  { id: '6', icon: '💆', name: 'Hair Oil', category: 'Hair Care', desc: 'Traditional hair nourishment blend. Strengthens roots, reduces hair fall and adds shine.', price: 900, ingredients: ['Coconut Oil', 'Hibiscus', 'Kalanduru'] },
 ];
 
 const categories = ['All', 'Face Care', 'Body Care', 'Hair Care'];
@@ -16,6 +18,11 @@ const Products = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('default');
+  const [addedItems, setAddedItems] = useState({});
+  const [message, setMessage] = useState('');
+  const { addToCart, loading } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const filtered = allProducts
     .filter(p => activeCategory === 'All' || p.category === activeCategory)
@@ -25,6 +32,31 @@ const Products = () => {
       if (sortBy === 'high') return b.price - a.price;
       return 0;
     });
+
+  const handleAddToCart = async (product) => {
+    if (!user) {
+      setMessage('⚠️ Please login to add items to cart!');
+      setTimeout(() => setMessage(''), 3000);
+      return;
+    }
+
+    const result = await addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      icon: product.icon,
+      category: product.category
+    });
+
+    if (result.success) {
+      setAddedItems(prev => ({ ...prev, [product.id]: true }));
+      setMessage(`✅ ${product.name} added to cart!`);
+      setTimeout(() => {
+        setAddedItems(prev => ({ ...prev, [product.id]: false }));
+        setMessage('');
+      }, 2000);
+    }
+  };
 
   return (
     <div style={styles.page}>
@@ -36,6 +68,11 @@ const Products = () => {
           Pure ayurvedic beauty products made with natural ingredients
         </p>
       </div>
+
+      {/* Toast Message */}
+      {message && (
+        <div style={styles.toast}>{message}</div>
+      )}
 
       {/* Search & Sort Bar */}
       <div style={styles.toolbar}>
@@ -86,29 +123,26 @@ const Products = () => {
         <div style={styles.grid}>
           {filtered.map(p => (
             <div key={p.id} style={styles.card}>
-              {/* Product Icon */}
               <div style={styles.cardIconWrapper}>
                 <span style={styles.cardIcon}>{p.icon}</span>
                 <span style={styles.categoryTag}>{p.category}</span>
               </div>
-
-              {/* Product Info */}
               <div style={styles.cardBody}>
                 <h3 style={styles.cardName}>{p.name}</h3>
                 <p style={styles.cardDesc}>{p.desc}</p>
-
-                {/* Ingredients */}
                 <div style={styles.ingredientTags}>
                   {p.ingredients.map((ing, i) => (
                     <span key={i} style={styles.ingTag}>🌿 {ing}</span>
                   ))}
                 </div>
-
-                {/* Price & Button */}
                 <div style={styles.cardFooter}>
                   <span style={styles.price}>LKR {p.price.toLocaleString()}</span>
-                  <button style={styles.addToCartBtn}>
-                    Add to Cart 🛒
+                  <button
+                    style={addedItems[p.id] ? styles.addedBtn : styles.addToCartBtn}
+                    onClick={() => handleAddToCart(p)}
+                    disabled={loading || addedItems[p.id]}
+                  >
+                    {addedItems[p.id] ? '✅ Added!' : '🛒 Add to Cart'}
                   </button>
                 </div>
               </div>
@@ -117,12 +151,11 @@ const Products = () => {
         </div>
       )}
 
-      {/* Bottom CTA */}
+      {/* Bottom */}
       <div style={styles.bottomCta}>
         <p style={styles.bottomCtaText}>🌿 All products are handcrafted with pure ayurvedic ingredients</p>
         <Link to="/" style={styles.backBtn}>← Back to Home</Link>
       </div>
-
     </div>
   );
 };
@@ -134,26 +167,26 @@ const styles = {
     backgroundColor: '#fafffe',
     paddingBottom: '60px'
   },
-
-  // Header
   header: {
     backgroundColor: '#2d6a4f',
     padding: '60px 8%',
     textAlign: 'center'
   },
-  headerTitle: {
-    fontSize: '42px',
-    fontWeight: '800',
+  headerTitle: { fontSize: '42px', fontWeight: '800', color: 'white', margin: '0 0 12px 0' },
+  headerSubtitle: { fontSize: '16px', color: '#b7dfc9', margin: 0 },
+  toast: {
+    position: 'fixed',
+    top: '90px',
+    right: '24px',
+    backgroundColor: '#2d6a4f',
     color: 'white',
-    margin: '0 0 12px 0'
+    padding: '14px 24px',
+    borderRadius: '12px',
+    fontWeight: '600',
+    fontSize: '15px',
+    zIndex: 999,
+    boxShadow: '0 4px 16px rgba(0,0,0,0.2)'
   },
-  headerSubtitle: {
-    fontSize: '16px',
-    color: '#b7dfc9',
-    margin: 0
-  },
-
-  // Toolbar
   toolbar: {
     display: 'flex',
     gap: '16px',
@@ -182,8 +215,6 @@ const styles = {
     cursor: 'pointer',
     outline: 'none'
   },
-
-  // Categories
   categories: {
     display: 'flex',
     gap: '12px',
@@ -210,31 +241,19 @@ const styles = {
     fontSize: '14px',
     cursor: 'pointer'
   },
-
-  // Results
-  resultCount: {
-    padding: '0 8%',
-    color: '#888',
-    fontSize: '14px',
-    marginBottom: '8px'
-  },
-
-  // Grid
+  resultCount: { padding: '0 8%', color: '#888', fontSize: '14px', marginBottom: '8px' },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
     gap: '24px',
     padding: '0 8%'
   },
-
-  // Card
   card: {
     backgroundColor: 'white',
     borderRadius: '16px',
     overflow: 'hidden',
     boxShadow: '0 4px 16px rgba(0,0,0,0.07)',
-    border: '1px solid #e8f5e9',
-    transition: 'transform 0.2s'
+    border: '1px solid #e8f5e9'
   },
   cardIconWrapper: {
     backgroundColor: '#f0faf5',
@@ -246,8 +265,7 @@ const styles = {
   cardIcon: { fontSize: '72px' },
   categoryTag: {
     position: 'absolute',
-    top: '12px',
-    right: '12px',
+    top: '12px', right: '12px',
     backgroundColor: '#2d6a4f',
     color: 'white',
     fontSize: '11px',
@@ -256,26 +274,9 @@ const styles = {
     borderRadius: '10px'
   },
   cardBody: { padding: '20px' },
-  cardName: {
-    fontSize: '20px',
-    fontWeight: '700',
-    color: '#1a1a2e',
-    margin: '0 0 8px 0'
-  },
-  cardDesc: {
-    fontSize: '14px',
-    color: '#777',
-    lineHeight: '1.6',
-    margin: '0 0 16px 0'
-  },
-
-  // Ingredient tags
-  ingredientTags: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '6px',
-    marginBottom: '20px'
-  },
+  cardName: { fontSize: '20px', fontWeight: '700', color: '#1a1a2e', margin: '0 0 8px 0' },
+  cardDesc: { fontSize: '14px', color: '#777', lineHeight: '1.6', margin: '0 0 16px 0' },
+  ingredientTags: { display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '20px' },
   ingTag: {
     backgroundColor: '#e8f5e9',
     color: '#2d6a4f',
@@ -284,8 +285,6 @@ const styles = {
     padding: '4px 10px',
     borderRadius: '10px'
   },
-
-  // Card footer
   cardFooter: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -293,11 +292,7 @@ const styles = {
     borderTop: '1px solid #f0f0f0',
     paddingTop: '16px'
   },
-  price: {
-    color: '#2d6a4f',
-    fontWeight: '800',
-    fontSize: '18px'
-  },
+  price: { color: '#2d6a4f', fontWeight: '800', fontSize: '18px' },
   addToCartBtn: {
     backgroundColor: '#2d6a4f',
     color: 'white',
@@ -308,30 +303,20 @@ const styles = {
     fontSize: '13px',
     cursor: 'pointer'
   },
-
-  // No results
-  noResults: {
-    textAlign: 'center',
-    padding: '60px',
-    color: '#888'
-  },
-
-  // Bottom
-  bottomCta: {
-    textAlign: 'center',
-    padding: '40px 8% 0'
-  },
-  bottomCtaText: {
-    color: '#888',
-    fontSize: '14px',
-    marginBottom: '16px'
-  },
-  backBtn: {
-    color: '#2d6a4f',
-    textDecoration: 'none',
+  addedBtn: {
+    backgroundColor: '#52b788',
+    color: 'white',
+    border: 'none',
+    padding: '10px 18px',
+    borderRadius: '20px',
     fontWeight: '600',
-    fontSize: '15px'
-  }
+    fontSize: '13px',
+    cursor: 'not-allowed'
+  },
+  noResults: { textAlign: 'center', padding: '60px', color: '#888' },
+  bottomCta: { textAlign: 'center', padding: '40px 8% 0' },
+  bottomCtaText: { color: '#888', fontSize: '14px', marginBottom: '16px' },
+  backBtn: { color: '#2d6a4f', textDecoration: 'none', fontWeight: '600', fontSize: '15px' }
 };
 
 export default Products;

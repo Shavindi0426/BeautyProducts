@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
+// Assets
 import logo from '../assets/logo.png.jpeg';
+import banner from '../assets/banner.png';
+
+// Product images
 import aloeVera from '../assets/products/aloe-vera-gel.jpg.jpeg';
 import bodyLotionSaffron from '../assets/products/body-lotion-saffron.jpg.jpeg';
 import bodyLotionSandalwood from '../assets/products/body-lotion-sandalwood.jpg.jpeg';
@@ -13,107 +17,99 @@ import faceWashGold from '../assets/products/face-wash-gold.jpg.jpeg';
 import hairOil from '../assets/products/hair-oil.jpg.jpeg';
 import nightCream from '../assets/products/night-cream.jpg.jpeg';
 
+// Ingredient images
+import ingRedSandalwood from '../assets/ingredients/red-sandalwood.jpg';
+import ingNeem from '../assets/ingredients/neem.jpg';
+import ingSaffron from '../assets/ingredients/saffron.jpg';
+import ingCinnamon from '../assets/ingredients/cinnamon.jpg';
+import ingHibiscus from '../assets/ingredients/hibiscus.jpeg';
+import ingButterflyPea from '../assets/ingredients/butterfly-pea.jpg';
+import ingTurmeric from '../assets/ingredients/turmeric.jpg';
+import ingRose from '../assets/ingredients/rose.webp';
+import ingGotukola from '../assets/ingredients/gotu-kola.jpg';
+import ingHoney from '../assets/ingredients/honey.webp';
+import ingCurryLeaves from '../assets/ingredients/curry-leaves.webp';
+import ingCoffee from '../assets/ingredients/coffee.webp';
+import ingCloves from '../assets/ingredients/cloves.jpg';
+import ingWhiteSandalwood from '../assets/ingredients/white-sandalwood.jpeg';
+
 const products = [
   {
-    id: '1',
-    image: aloeVera,
-    name: 'Aloe Vera Gel',
-    category: 'Body Care',
+    id: '1', image: aloeVera,
+    name: 'Aloe Vera Gel', category: 'Body Care',
     tagline: "Nature's Care in Every Drop!",
     desc: 'Enriched with pure Aloe Vera and Ayurvedic ingredients to refresh, soothe and nourish your skin naturally. Suitable for all skin types including dry skin.',
-    price: 750,
-    volume: '100ml',
+    price: 750, volume: '100ml',
     badges: ['Paraben Free', 'Silicone Free', '100% Natural'],
     ingredients: ['Aloe Vera', 'Ayurvedic Herbs', 'Natural Extracts'],
     benefits: ['Soothes & Hydrates Skin', 'For Face & Body', 'All Skin Types']
   },
   {
-    id: '2',
-    image: bodyLotionSaffron,
-    name: 'Ayurvedic Saffron Body Lotion',
-    category: 'Body Care',
+    id: '2', image: bodyLotionSaffron,
+    name: 'Ayurvedic Saffron Body Lotion', category: 'Body Care',
     tagline: "Nature's Nourishment for All Skin Types",
     desc: 'A luxurious body lotion enriched with pure Saffron and Ayurvedic ingredients. Deeply moisturizes, nourishes and brightens skin naturally with no mineral oil.',
-    price: 2000,
-    volume: '200ml',
+    price: 2000, volume: '200ml',
     badges: ['No Mineral Oil', 'All Skin Types', '100% Natural'],
     ingredients: ['Saffron', 'Ayurvedic Herbs', 'Natural Oils'],
     benefits: ['Moisturizes & Nourishes', 'Brightens Skin', 'No Mineral Oil']
   },
   {
-    id: '3',
-    image: bodyLotionSandalwood,
-    name: 'Sandalwood Body Lotion',
-    category: 'Body Care',
-    tagline: "Pure & Natural Body Care",
+    id: '3', image: bodyLotionSandalwood,
+    name: 'Sandalwood Body Lotion', category: 'Body Care',
+    tagline: 'Pure & Natural Body Care',
     desc: 'A deeply nourishing body lotion enriched with pure Sandalwood and Ayurvedic herbs. Leaves your skin soft, smooth and beautifully scented.',
-    price: 2200,
-    volume: '200ml',
+    price: 1800, volume: '200ml',
     badges: ['100% Natural', 'No Harmful Chemicals', 'Ayurvedic'],
     ingredients: ['Sandalwood', 'Coconut Oil', 'Ayurvedic Herbs'],
     benefits: ['Deep Moisturizing', 'Natural Fragrance', 'All Skin Types']
   },
   {
-    id: '4',
-    image: faceWashSandalwood,
-    name: 'Red Sandalwood Face Wash',
-    category: 'Face Care',
+    id: '4', image: faceWashSandalwood,
+    name: 'Red Sandalwood Face Wash', category: 'Face Care',
     tagline: 'Naturally Clean. Deeply Nourished.',
     desc: 'A gentle blend of Ayurvedic herbs enriched with Red Sandalwood, Kohomba and Venivelgata that cleanses, purifies and refreshes your skin naturally.',
-    price: 600,
-    volume: '100ml',
+    price: 600, volume: '100ml',
     badges: ['100% Natural', 'No Harmful Chemicals', 'Ayurvedic'],
     ingredients: ['Red Sandalwood', 'Kohomba', 'Venivelgata'],
     benefits: ['Gentle Cleansing', 'Glow Boosting', 'All Skin Types']
   },
   {
-    id: '5',
-    image: faceWashKalanduru,
-    name: 'Kalanduru Face Wash',
-    category: 'Face Care',
+    id: '5', image: faceWashKalanduru,
+    name: 'Kalanduru Face Wash', category: 'Face Care',
     tagline: 'Pure. Natural. Perfect for Your Skin.',
     desc: 'Powered by Kalanduru (Cyperus Rotundus), Kohomba and Rosehip Oil. Purifies skin, reduces acne, controls excess oil and adds a natural healthy glow.',
-    price: 600,
-    volume: '100ml',
+    price: 600, volume: '100ml',
     badges: ['100% Natural', 'No Harmful Chemicals', 'Ayurvedic'],
     ingredients: ['Kalanduru', 'Kohomba', 'Rosehip Oil'],
     benefits: ['Purifies Skin', 'Reduces Acne', 'Controls Oil']
   },
   {
-    id: '6',
-    image: faceWashGold,
-    name: 'Gold Face Wash',
-    category: 'Face Care',
+    id: '6', image: faceWashGold,
+    name: 'Gold Face Wash', category: 'Face Care',
     tagline: 'Naturally Clean. Deeply Nourished.',
     desc: 'A gentle blend of Aloe Vera, Rosehip Oil and Ayurvedic ingredients for healthy, glowing skin every day. Removes impurities without drying your skin.',
-    price: 600,
-    volume: '100ml',
+    price: 600, volume: '100ml',
     badges: ['100% Natural', 'Ayurvedic Goodness', 'Made in Sri Lanka'],
     ingredients: ['Aloe Vera', 'Rosehip Oil', 'Ayurvedic Herbs'],
     benefits: ['Gentle Cleansing', 'Natural Glow', 'All Skin Types']
   },
   {
-    id: '7',
-    image: hairOil,
-    name: 'Ayurvedic Hair Oil',
-    category: 'Hair Care',
+    id: '7', image: hairOil,
+    name: 'Ayurvedic Hair Oil', category: 'Hair Care',
     tagline: 'Nourish Your Hair Naturally',
     desc: 'Traditional ayurvedic hair oil blend that strengthens roots, reduces hair fall and adds natural shine. Made with pure Ceylon herbs and oils.',
-    price: 1000,
-    volume: '100ml',
+    price: 900, volume: '100ml',
     badges: ['100% Natural', 'No Mineral Oil', 'Ayurvedic'],
     ingredients: ['Coconut Oil', 'Hibiscus', 'Kalanduru'],
     benefits: ['Reduces Hair Fall', 'Strengthens Roots', 'Adds Shine']
   },
   {
-    id: '8',
-    image: nightCream,
-    name: 'Ayurvedic Night Cream',
-    category: 'Face Care',
+    id: '8', image: nightCream,
+    name: 'Ayurvedic Night Cream', category: 'Face Care',
     tagline: 'Restore & Rejuvenate While You Sleep',
     desc: 'A rich night cream infused with powerful Ayurvedic herbs that works overnight to restore, rejuvenate and deeply nourish your skin while you sleep.',
-    price: 2500,
-    volume: '50ml',
+    price: 1200, volume: '50ml',
     badges: ['100% Natural', 'No Harmful Chemicals', 'Ayurvedic'],
     ingredients: ['Saffron', 'Sandalwood', 'Gotukola'],
     benefits: ['Overnight Repair', 'Deep Nourishment', 'Anti-Aging']
@@ -127,28 +123,21 @@ const benefits = [
   { icon: '🇱🇰', title: 'Made in Sri Lanka', desc: 'Proudly crafted in Sri Lanka' }
 ];
 
-const plants = [
-  { emoji: '🌿', name: 'Tulsi', benefit: 'Purifies & heals', top: '10%', left: '5%', size: '56px', delay: '0s' },
-  { emoji: '🌺', name: 'Hibiscus', benefit: 'Hair growth', top: '20%', right: '4%', size: '52px', delay: '0.4s' },
-  { emoji: '🍃', name: 'Neem', benefit: 'Antibacterial', top: '65%', left: '3%', size: '48px', delay: '0.8s' },
-  { emoji: '🌸', name: 'Rose', benefit: 'Skin glow', top: '70%', right: '5%', size: '52px', delay: '0.2s' },
-  { emoji: '🌼', name: 'Turmeric', benefit: 'Anti-aging', top: '85%', left: '8%', size: '44px', delay: '1s' },
-  { emoji: '🪴', name: 'Aloe Vera', benefit: 'Deep hydration', top: '5%', right: '12%', size: '50px', delay: '0.6s' },
-];
-
 const ingredients = [
-  { emoji: '🪵', name: 'Red Sandalwood', benefit: 'Skin brightening', desc: 'Cools and soothes skin, reduces dark spots and evens skin tone naturally' },
-  { emoji: '🌿', name: 'Kohomba (Neem)', benefit: 'Antibacterial', desc: 'Powerful antibacterial herb used in Ayurveda for centuries to treat acne and skin infections' },
-  { emoji: '🌸', name: 'Saffron', benefit: 'Skin glow', desc: 'Rare golden spice that brightens complexion, reduces pigmentation and gives a natural glow' },
-  { emoji: '🌰', name: 'Kalanduru (Cinnamon)', benefit: 'Anti-inflammatory', desc: 'True Ceylon cinnamon with anti-inflammatory properties that stimulates blood circulation' },
-  { emoji: '🌺', name: 'Hibiscus', benefit: 'Hair growth', desc: 'Promotes hair growth, prevents premature greying and adds natural shine and softness' },
-  { emoji: '🪴', name: 'Aloe Vera', benefit: 'Deep hydration', desc: 'Deep hydration and cooling effect, perfect for soothing sunburns and sensitive skin' },
-  { emoji: '🌼', name: 'Turmeric', benefit: 'Anti-aging', desc: 'Ancient golden spice with powerful antioxidants that fight aging and brighten skin' },
-  { emoji: '🫚', name: 'Coconut Oil', benefit: 'Deep nourishment', desc: 'Pure Ceylon coconut oil deeply nourishes hair and skin, locking in moisture naturally' },
-  { emoji: '🌱', name: 'Gotukola', benefit: 'Collagen boost', desc: 'Traditional Sri Lankan herb that boosts collagen production and heals skin naturally' },
-  { emoji: '🍃', name: 'Ranawara', benefit: 'Skin healing', desc: 'Beautiful golden Sri Lankan flower known for its skin healing and brightening properties' },
-  { emoji: '🌿', name: 'Iramusu', benefit: 'Blood purifying', desc: 'Powerful blood purifying herb that clears skin from within, treating eczema and rashes' },
-  { emoji: '🫙', name: 'Bee Honey', benefit: 'Moisturizing', desc: 'Pure natural honey with antibacterial properties that moisturizes and heals damaged skin' },
+  { image: ingRedSandalwood, name: 'Red Sandalwood', benefit: 'Skin Brightening', desc: 'Cools and soothes skin, reduces dark spots and evens skin tone naturally' },
+  { image: ingNeem, name: 'Kohomba (Neem)', benefit: 'Antibacterial', desc: 'Powerful antibacterial herb used in Ayurveda for centuries to treat acne and skin infections' },
+  { image: ingSaffron, name: 'Saffron', benefit: 'Skin Glow', desc: 'Rare golden spice that brightens complexion, reduces pigmentation and gives a natural glow' },
+  { image: ingCinnamon, name: 'Kalanduru (Cinnamon)', benefit: 'Anti-inflammatory', desc: 'True Ceylon cinnamon with anti-inflammatory properties that stimulates blood circulation' },
+  { image: ingHibiscus, name: 'Hibiscus', benefit: 'Hair Growth', desc: 'Promotes hair growth, prevents premature greying and adds natural shine and softness' },
+  { image: ingButterflyPea, name: 'Butterfly Pea', benefit: 'Deep Hydration', desc: 'Rich in antioxidants, promotes hair growth and gives natural benefits used in ayurvedic care' },
+  { image: ingTurmeric, name: 'Turmeric', benefit: 'Anti-aging', desc: 'Ancient golden spice with powerful antioxidants that fight aging and brighten skin' },
+  { image: ingRose, name: 'Rose', benefit: 'Skin Soothing', desc: 'Pure rose extracts deeply hydrate skin, reduce redness and leave a natural beautiful fragrance' },
+  { image: ingGotukola, name: 'Gotukola', benefit: 'Collagen Boost', desc: 'Traditional Sri Lankan herb that boosts collagen production and heals skin naturally' },
+  { image: ingHoney, name: 'Bee Honey', benefit: 'Moisturizing', desc: 'Pure natural honey with antibacterial properties that moisturizes and heals damaged skin' },
+  { image: ingCurryLeaves, name: 'Curry Leaves', benefit: 'Hair Nourishment', desc: 'Rich in proteins and antioxidants that strengthen hair follicles and prevent premature greying' },
+  { image: ingCoffee, name: 'Coffee', benefit: 'Exfoliating', desc: 'Natural exfoliant that removes dead skin cells, reduces puffiness and boosts circulation' },
+  { image: ingCloves, name: 'Cloves', benefit: 'Antiseptic', desc: 'Powerful antiseptic properties that fight bacteria, reduce acne and even out skin tone' },
+  { image: ingWhiteSandalwood, name: 'White Sandalwood', benefit: 'Skin Cooling', desc: 'Classic ayurvedic ingredient that cools skin, reduces inflammation and gives a natural glow' },
 ];
 
 const Home = () => {
@@ -186,70 +175,40 @@ const Home = () => {
   return (
     <div style={styles.page}>
 
-      {/* ── Hero ── */}
-      <section style={styles.hero}>
-        {plants.map((plant, i) => (
-          <div key={i} style={{
-            position: 'absolute', top: plant.top,
-            left: plant.left || 'auto', right: plant.right || 'auto',
-            textAlign: 'center', animation: 'float 3s ease-in-out infinite',
-            animationDelay: plant.delay, zIndex: 1
-          }}>
-            <div style={{ fontSize: plant.size }}>{plant.emoji}</div>
-            <div style={styles.plantLabel}>
-              <strong style={{ color: '#2d6a4f', fontSize: '11px' }}>{plant.name}</strong><br />
-              <span style={{ color: '#888', fontSize: '10px' }}>{plant.benefit}</span>
-            </div>
-          </div>
-        ))}
-
-        <div style={styles.heroContent}>
-          <img src={logo} alt="Orica" style={styles.heroLogo} />
-          <span style={styles.badge}>🌿 Pure Ayurvedic Beauty</span>
-          <h1 style={styles.heroTitle}>
-            Discover the Power of<br />
-            <span style={styles.heroHighlight}>Nature's Beauty</span>
-          </h1>
-          <p style={styles.heroSubtitle}>
-            Handcrafted ayurvedic beauty products made with pure Sri Lankan
-            natural ingredients for radiant, healthy skin.
-          </p>
-          <div style={styles.statsRow}>
-            <div style={styles.stat}><strong style={styles.statNum}>100%</strong><span style={styles.statLabel}>Natural</span></div>
-            <div style={styles.statDivider} />
-            <div style={styles.stat}><strong style={styles.statNum}>8+</strong><span style={styles.statLabel}>Products</span></div>
-            <div style={styles.statDivider} />
-            <div style={styles.stat}><strong style={styles.statNum}>🇱🇰</strong><span style={styles.statLabel}>Sri Lanka</span></div>
-          </div>
-          <div style={styles.heroButtons}>
-            <Link to="/products" style={styles.primaryBtn}>Shop Now →</Link>
-            {!user && <Link to="/register" style={styles.secondaryBtn}>Create Account</Link>}
-          </div>
-        </div>
-
-        {/* Hero Visual with real product image */}
-        <div style={styles.heroVisual}>
-          <div style={styles.outerRing}>
-            <div style={styles.middleRing}>
-              <div style={styles.innerCircle}>
-                <img src={bodyLotionSaffron} alt="Orica Body Lotion" style={styles.heroProductImg} />
+      {/* ── Hero Banner ── */}
+      <section style={styles.heroBanner}>
+        <img src={banner} alt="Orica Ayurvedic Beauty" style={styles.bannerImg} />
+        <div style={styles.bannerOverlay}>
+          <div style={styles.bannerContent}>
+            <div style={styles.statsRow}>
+              <div style={styles.stat}>
+                <strong style={styles.statNum}>100%</strong>
+                <span style={styles.statLabel}>Natural</span>
+              </div>
+              <div style={styles.statDivider} />
+              <div style={styles.stat}>
+                <strong style={styles.statNum}>8+</strong>
+                <span style={styles.statLabel}>Products</span>
+              </div>
+              <div style={styles.statDivider} />
+              <div style={styles.stat}>
+                <strong style={styles.statNum}>🇱🇰</strong>
+                <span style={styles.statLabel}>Sri Lanka</span>
               </div>
             </div>
+            <div style={styles.heroButtons}>
+              <Link to="/products" style={styles.primaryBtn}>Shop Now →</Link>
+              {!user && <Link to="/register" style={styles.secondaryBtn}>Create Account</Link>}
+            </div>
           </div>
-          <div style={{ ...styles.orbitBadge, top: '-10px', left: '50%', transform: 'translateX(-50%)' }}>🌸 Saffron</div>
-          <div style={{ ...styles.orbitBadge, top: '50%', right: '-30px', transform: 'translateY(-50%)' }}>🪵 Sandalwood</div>
-          <div style={{ ...styles.orbitBadge, bottom: '-10px', left: '50%', transform: 'translateX(-50%)' }}>🪴 Aloe Vera</div>
-          <div style={{ ...styles.orbitBadge, top: '50%', left: '-20px', transform: 'translateY(-50%)' }}>🌿 Kohomba</div>
-          <div style={styles.floatBadge1}>✨ Natural</div>
-          <div style={styles.floatBadge2}>🇱🇰 Sri Lanka</div>
         </div>
       </section>
 
       <style>{`
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-        @keyframes pulse-ring { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.04);opacity:.85} }
         @keyframes fadeIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
         .product-card:hover { transform: translateY(-6px) !important; box-shadow: 0 12px 32px rgba(0,0,0,0.12) !important; }
+        .ingredient-card:hover { transform: translateY(-4px) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; }
       `}</style>
 
       {/* ── Ingredients Strip ── */}
@@ -328,11 +287,15 @@ const Home = () => {
         <p style={styles.sectionSubtitle}>Ancient Sri Lankan plants and herbs with powerful beauty benefits</p>
         <div style={styles.ingredientsGrid}>
           {ingredients.map((ing, i) => (
-            <div key={i} style={styles.ingredientCard}>
-              <div style={{ fontSize: '44px', marginBottom: '10px' }}>{ing.emoji}</div>
-              <div style={styles.ingredientBadge}>{ing.benefit}</div>
-              <h4 style={styles.ingredientName}>{ing.name}</h4>
-              <p style={styles.ingredientDesc}>{ing.desc}</p>
+            <div key={i} className="ingredient-card" style={styles.ingredientCard}>
+              <div style={styles.ingredientImageWrapper}>
+                <img src={ing.image} alt={ing.name} style={styles.ingredientImage} />
+              </div>
+              <div style={styles.ingredientInfo}>
+                <div style={styles.ingredientBadge}>{ing.benefit}</div>
+                <h4 style={styles.ingredientName}>{ing.name}</h4>
+                <p style={styles.ingredientDesc}>{ing.desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -363,24 +326,20 @@ const Home = () => {
         <div style={styles.modalOverlay} onClick={closeModal}>
           <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
             <button style={styles.closeBtn} onClick={closeModal}>✕</button>
-
             <div style={styles.modalImageArea}>
               <img src={selectedProduct.image} alt={selectedProduct.name} style={styles.modalImage} />
               <span style={styles.modalCategoryTag}>{selectedProduct.category}</span>
               <span style={styles.modalVolumeTag}>{selectedProduct.volume}</span>
             </div>
-
             <div style={styles.modalBody}>
               <p style={styles.modalTagline}>{selectedProduct.tagline}</p>
               <h2 style={styles.modalName}>{selectedProduct.name}</h2>
               <p style={styles.modalDesc}>{selectedProduct.desc}</p>
-
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
                 {selectedProduct.badges.map((badge, i) => (
                   <span key={i} style={styles.modalBadge}>✅ {badge}</span>
                 ))}
               </div>
-
               <div style={{ marginBottom: '16px' }}>
                 <p style={styles.modalLabel}>Benefits</p>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -389,7 +348,6 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-
               <div style={{ marginBottom: '20px' }}>
                 <p style={styles.modalLabel}>Key Ingredients</p>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -398,7 +356,6 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-
               {user ? (
                 <>
                   <div style={styles.modalPriceRow}>
@@ -439,46 +396,49 @@ const Home = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
 
 const styles = {
   page: { fontFamily: "'Segoe UI', sans-serif", color: '#333', overflowX: 'hidden' },
-  hero: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '60px 8%', backgroundColor: '#fafffe', minHeight: '90vh', position: 'relative', overflow: 'hidden' },
-  heroContent: { flex: 1, maxWidth: '520px', position: 'relative', zIndex: 2 },
-  heroLogo: { height: '100px', objectFit: 'contain', marginBottom: '16px', display: 'block' },
-  badge: { backgroundColor: '#e8f5e9', color: '#2d6a4f', padding: '6px 16px', borderRadius: '20px', fontSize: '14px', fontWeight: '600' },
-  heroTitle: { fontSize: '48px', fontWeight: '800', lineHeight: '1.15', margin: '16px 0', color: '#1a1a2e' },
-  heroHighlight: { color: '#2d6a4f' },
-  heroSubtitle: { fontSize: '16px', color: '#666', lineHeight: '1.7', marginBottom: '24px' },
-  statsRow: { display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '28px', padding: '16px 20px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', width: 'fit-content' },
+
+  // Banner
+  heroBanner: { position: 'relative', width: '100%', overflow: 'hidden', maxHeight: '500px' },
+  bannerImg: { width: '100%', height: '500px', objectFit: 'cover', objectPosition: 'center', display: 'block' },
+  bannerOverlay: { position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)', padding: '40px 8%', display: 'flex', alignItems: 'flex-end' },
+  bannerContent: { display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' },
+
+  // Stats
+  statsRow: { display: 'flex', alignItems: 'center', gap: '20px', padding: '14px 20px', backgroundColor: 'rgba(255,255,255,0.95)', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.1)', width: 'fit-content' },
   stat: { textAlign: 'center' },
-  statNum: { display: 'block', fontSize: '22px', color: '#2d6a4f', fontWeight: '800' },
-  statLabel: { fontSize: '12px', color: '#888' },
-  statDivider: { width: '1px', height: '36px', backgroundColor: '#eee' },
-  heroButtons: { display: 'flex', gap: '16px', flexWrap: 'wrap' },
-  primaryBtn: { backgroundColor: '#2d6a4f', color: 'white', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '600', display: 'inline-block' },
-  secondaryBtn: { backgroundColor: 'transparent', color: '#2d6a4f', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '600', border: '2px solid #2d6a4f', display: 'inline-block' },
-  heroVisual: { flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '460px', zIndex: 2 },
-  outerRing: { width: '360px', height: '360px', borderRadius: '50%', border: '2px dashed #b7dfc9', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse-ring 4s ease-in-out infinite' },
-  middleRing: { width: '290px', height: '290px', borderRadius: '50%', border: '2px solid #d4edda', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0faf5' },
-  innerCircle: { width: '210px', height: '210px', borderRadius: '50%', backgroundColor: '#e8f5e9', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '3px solid #b7dfc9', overflow: 'hidden' },
-  heroProductImg: { width: '100%', height: '100%', objectFit: 'cover' },
-  orbitBadge: { position: 'absolute', backgroundColor: 'white', padding: '6px 14px', borderRadius: '20px', boxShadow: '0 3px 10px rgba(0,0,0,0.1)', fontWeight: '600', fontSize: '13px', color: '#2d6a4f', whiteSpace: 'nowrap' },
-  floatBadge1: { position: 'absolute', top: '20px', right: '20px', backgroundColor: '#2d6a4f', color: 'white', padding: '8px 16px', borderRadius: '20px', fontWeight: '600', fontSize: '13px' },
-  floatBadge2: { position: 'absolute', bottom: '30px', right: '10px', backgroundColor: 'white', color: '#2d6a4f', padding: '8px 16px', borderRadius: '20px', fontWeight: '600', fontSize: '13px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' },
-  plantLabel: { backgroundColor: 'white', borderRadius: '8px', padding: '4px 8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginTop: '4px', whiteSpace: 'nowrap' },
+  statNum: { display: 'block', fontSize: '20px', color: '#2d6a4f', fontWeight: '800' },
+  statLabel: { fontSize: '11px', color: '#888' },
+  statDivider: { width: '1px', height: '32px', backgroundColor: '#eee' },
+
+  // Buttons
+  heroButtons: { display: 'flex', gap: '12px', flexWrap: 'wrap' },
+  primaryBtn: { backgroundColor: '#2d6a4f', color: 'white', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '600', display: 'inline-block', boxShadow: '0 4px 15px rgba(45,106,79,0.4)' },
+  secondaryBtn: { backgroundColor: 'white', color: '#2d6a4f', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '600', border: '2px solid #2d6a4f', display: 'inline-block' },
+
+  // Strip
   strip: { backgroundColor: '#2d6a4f', padding: '14px 0', display: 'flex', gap: '32px', justifyContent: 'center', flexWrap: 'wrap' },
   stripItem: { color: 'white', fontSize: '14px', fontWeight: '500', whiteSpace: 'nowrap' },
+
+  // Sections
   section: { padding: '80px 8%', textAlign: 'center' },
   sectionTitle: { fontSize: '36px', fontWeight: '700', color: '#1a1a2e', marginBottom: '12px' },
   sectionSubtitle: { fontSize: '16px', color: '#888', marginBottom: '48px' },
+
+  // Benefits
   benefitsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px' },
   benefitCard: { padding: '32px 24px', backgroundColor: '#f9f9f9', borderRadius: '16px', textAlign: 'center', border: '1px solid #eee' },
   benefitIcon: { fontSize: '40px', display: 'block', marginBottom: '12px' },
   benefitTitle: { fontSize: '18px', fontWeight: '700', color: '#2d6a4f', marginBottom: '8px' },
   benefitDesc: { fontSize: '14px', color: '#777', lineHeight: '1.6' },
+
+  // Products
   productsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px' },
   productCard: { backgroundColor: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.07)', border: '1px solid #e8f5e9', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', textAlign: 'left' },
   productImageWrapper: { position: 'relative', height: '260px', overflow: 'hidden', borderBottom: '1px solid #e8f5e9' },
@@ -494,20 +454,31 @@ const styles = {
   productPrice: { color: '#2d6a4f', fontWeight: '800', fontSize: '17px' },
   blurredPrice: { color: '#bbb', fontWeight: '700', fontSize: '15px', filter: 'blur(4px)', userSelect: 'none' },
   viewBtn: { color: '#2d6a4f', fontWeight: '600', fontSize: '13px' },
-  ingredientsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' },
-  ingredientCard: { backgroundColor: '#f0faf5', borderRadius: '16px', padding: '24px 20px', textAlign: 'center', border: '1px solid #d4edda' },
-  ingredientBadge: { display: 'inline-block', backgroundColor: '#2d6a4f', color: 'white', fontSize: '10px', fontWeight: '700', padding: '3px 10px', borderRadius: '10px', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' },
-  ingredientName: { fontSize: '15px', fontWeight: '700', color: '#2d6a4f', margin: '0 0 8px 0' },
-  ingredientDesc: { fontSize: '12px', color: '#666', lineHeight: '1.6', margin: 0 },
+
+  // Ingredients
+  ingredientsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' },
+  ingredientCard: { backgroundColor: 'white', borderRadius: '16px', overflow: 'hidden', textAlign: 'center', border: '1px solid #d4edda', boxShadow: '0 4px 12px rgba(0,0,0,0.06)', transition: 'transform 0.2s, box-shadow 0.2s' },
+  ingredientImageWrapper: { width: '100%', height: '160px', overflow: 'hidden' },
+  ingredientImage: { width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' },
+  ingredientInfo: { padding: '14px' },
+  ingredientBadge: { display: 'inline-block', backgroundColor: '#2d6a4f', color: 'white', fontSize: '10px', fontWeight: '700', padding: '3px 10px', borderRadius: '10px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' },
+  ingredientName: { fontSize: '14px', fontWeight: '700', color: '#2d6a4f', margin: '0 0 6px 0' },
+  ingredientDesc: { fontSize: '11px', color: '#666', lineHeight: '1.6', margin: 0 },
+
+  // CTA
   ctaSection: { backgroundColor: '#2d6a4f', padding: '80px 8%', textAlign: 'center' },
   ctaTitle: { fontSize: '36px', fontWeight: '700', color: 'white', marginBottom: '12px' },
   ctaSubtitle: { fontSize: '16px', color: '#b7dfc9', marginBottom: '36px' },
   ctaButtons: { display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' },
   ctaPrimaryBtn: { backgroundColor: 'white', color: '#2d6a4f', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '700', display: 'inline-block' },
   ctaSecondaryBtn: { backgroundColor: 'transparent', color: 'white', padding: '14px 28px', borderRadius: '30px', textDecoration: 'none', fontSize: '15px', fontWeight: '600', border: '2px solid white', display: 'inline-block' },
+
+  // Footer
   footer: { backgroundColor: '#1a1a2e', padding: '40px', textAlign: 'center' },
   footerText: { color: '#aaa', fontSize: '15px', marginBottom: '4px' },
   footerSub: { color: '#666', fontSize: '13px' },
+
+  // Modal
   modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' },
   modalBox: { backgroundColor: 'white', borderRadius: '20px', width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', animation: 'fadeIn 0.25s ease' },
   closeBtn: { position: 'absolute', top: '16px', right: '16px', backgroundColor: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', fontSize: '14px', cursor: 'pointer', fontWeight: '700', zIndex: 10 },
